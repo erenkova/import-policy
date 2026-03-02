@@ -190,9 +190,33 @@ def convert_excel_to_rego(excel_path, output_path):
         return False
 
 if __name__ == "__main__":
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    
+    excel_dir = os.path.join(project_root, "excel_tables")
+    rego_dir = os.path.join(project_root, "rego_policies")
+    
     if len(sys.argv) < 3:
-        print("Использование: python excel_to_rego.py <input.xlsx> <output.rego>")
+        print("Использование:")
+        print("  python src/excel_to_rego.py <input.xlsx> <output.rego>")
+        print("  python src/excel_to_rego.py security_policies.xlsx policy_security.rego")
+        print("\nФайлы ищутся в папках:")
+        print(f"  Excel: {excel_dir}")
+        print(f"  Rego:  {rego_dir}")
         sys.exit(1)
     
-    success = convert_excel_to_rego(sys.argv[1], sys.argv[2])
+    input_filename = sys.argv[1]
+    output_filename = sys.argv[2]
+
+    if not os.path.isabs(input_filename):
+        input_file = os.path.join(excel_dir, input_filename)
+    else:
+        input_file = input_filename
+    
+    if not os.path.isabs(output_filename):
+        output_file = os.path.join(rego_dir, output_filename)
+    else:
+        output_file = output_filename
+    
+    success = convert_excel_to_rego(input_file, output_file)
     sys.exit(0 if success else 1)
