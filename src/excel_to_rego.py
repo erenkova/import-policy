@@ -5,20 +5,17 @@ import json
 import re
 
 def sanitize_id(req_id):
-    """Превращает ID в валидное имя переменной Rego"""
     if pd.isna(req_id):
         return "unknown_rule"
     return re.sub(r'[^a-zA-Z0-9]', '_', str(req_id))
 
 def parse_list_value(list_str):
-    """Парсит строку списка 'val1,val2' в массив Rego"""
     if pd.isna(list_str) or str(list_str).strip() == '':
         return []
     items = [str(x).strip() for x in str(list_str).split(',')]
     return json.dumps(items)
 
 def format_rego_value(val):
-    """Форматирует значение для Rego"""
     if pd.isna(val):
         return "null"
     s_val = str(val).strip().lower()
@@ -29,7 +26,6 @@ def format_rego_value(val):
     return f'"{val}"'
 
 def generate_config_rule(row):
-    """Генерация правила для config_parameter"""
     req_id = sanitize_id(row.get('req_id', 'unknown'))
     path = str(row.get('config_key_path', '')).strip()
     exp_value = row.get('expected_value')
@@ -42,7 +38,6 @@ def generate_config_rule(row):
     
     rego_path = f"input.config.{path}"
     
-    # Определяем тип проверки
     if not pd.isna(exp_list) and str(exp_list).strip() != '':
         val = parse_list_value(exp_list)
         condition = f"not {rego_path} in {val}"
@@ -69,7 +64,6 @@ def generate_config_rule(row):
     return rule, None
 
 def generate_file_rule(row, check_type):
-    """Генерация правила для file_permissions/file_owner"""
     req_id = sanitize_id(row.get('req_id', 'unknown'))
     file_pattern = str(row.get('file_path_pattern', '')).strip()
     req_name = str(row.get('req_name', 'File Check'))
@@ -115,11 +109,9 @@ def convert_excel_to_rego(excel_path, output_path):
         return False
     
     try:
-        # Читаем Excel - первая строка заголовки
         df = pd.read_excel(excel_path)
         print(f"✓ Прочитано {len(df)} строк")
         
-        # Проверяем обязательные колонки
         if 'req_id' not in df.columns:
             print("✗ Ошибка: Отсутствует колонка 'req_id'")
             print(f"  Доступные колонки: {df.columns.tolist()}")
@@ -131,9 +123,6 @@ def convert_excel_to_rego(excel_path, output_path):
         
         rego_header = """package main
 
-# Nginx Security Policy
-# Generated from Excel
-# Compatible with Conftest v0.40+ / OPA v0.60+
 
 """
         
@@ -174,7 +163,6 @@ def convert_excel_to_rego(excel_path, output_path):
                 error_count += 1
                 continue
         
-        # Записываем файл
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write(rego_header + rules_content)
         
