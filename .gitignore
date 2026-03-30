@@ -2,5 +2,17 @@ __pycache__/
 *.pyc
 .venv/
 env/
+/src/run-ssh.py
+/policies/mariadb.rego
+/policies/mongodb.rego
+/policies/nginx-luxms.rego
+/policies/nginx-pix.rego
+/policies/nginx.rego
+/policies/nt.rego
+/policies/postgres.rego
+/policies/prom.rego
+/policies/rabbitmq.rego
+/policies/test-nginx.rego
+/policies/test-prom.rego
 .DS_Store
 !.gitignore
