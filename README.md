@@ -73,6 +73,12 @@ python src/check.py \
     -o results/nginx_image_audit.json \
     -i nginx:latest
 
+python src/check.py \
+    -c /etc/nginx/nginx.conf \
+    -p policies/nginx.rego \
+    -o results/nginx_remote_audit.json \
+    -r user@remote_host_ip
+
 ПАРАМЕТРЫ КОМАНДНОЙ СТРОКИ
 Параметр
 Описание
@@ -95,3 +101,5 @@ ID запущенного контейнера
 -i, --image
 Имя Docker-образа
 -i nginx:latest
+Удаленный хост
+-r user@remote_host_ip
