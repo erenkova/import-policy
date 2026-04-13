@@ -3,6 +3,8 @@ __pycache__/
 .venv/
 env/
 /src/run-ssh.py
+/src/ch1.py
+/src/etor.py
 /policies/mariadb.rego
 /policies/mongodb.rego
 /policies/nginx-luxms.rego
@@ -16,3 +18,4 @@ env/
 /policies/test-prom.rego
 .DS_Store
 !.gitignore
+

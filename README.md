@@ -103,3 +103,21 @@ ID запущенного контейнера
 -i nginx:latest
 Удаленный хост
 -r user@remote_host_ip
+
+
+Проверяющиеся переменные
+Тип проверки
+Поддержка
+Реализация в Rego
+параметр == точное_значение
+input.config.key != "value"
+параметр != запрещённое
+Префикс != в таблице → input.config.key == "val"
+параметр ∈ [список]
+Генерируется any_allowed_key() с some v in allowed
+параметр содержит подстроку
+contains(lower(input.config.key), "substring")
+права_на_файл == octal
+input.files["path"].permissions != "640"
+владелец_файла == user
+input.files["path"].owner != "root"
